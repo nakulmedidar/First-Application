@@ -1,29 +1,22 @@
-pipeline {
-
-   agent any
-   stages {
-     
-      stage('build bar') {
-        steps {
-        bat label: '', script: '''
-echo off
-set projectName=APP
-"C:\\Program Files\\IBM\\ACE\\12.0.5.0\\tools\\mqsicreatebar.exe" -data . -b %projectName%.bar -a %projectName% -cleanBuild
-'''
+node
+{
+    stage('clonning from GIT'){
+checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'GIT_REPO', url: 'https://github.com/nakulmedidar/First-Application.git]]])
+     }
+    stage('SonarQube Analysis') {
+     def scannerHome = tool 'sonarqube'
+      withSonarQubeEnv('SonarQube') {
+      sh """/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
+     -D sonar.projectVersion=APP \
+       -D sonar.login=admin \
+      -D sonar.password=Nakul@123 \
+      -D sonar.projectBaseDir=/var/lib/jenkins/workspace/SonarQube-Pipeline/ \
+        -D sonar.projectKey=APP \
+        -D sonar.sourceEncoding=UTF-8 \
+        -D sonar.language=java \
+        -D sonar.sources=APP/src/main \
+        -D sonar.tests=APP/src/test \
+        -D sonar.host.url=http://localhost:9000/"""
+        }
 }
-      }
-    stage('deploy bar') {
- steps {
- bat label: '', script: '''
-echo off
-set workspace=%cd%
-cd C:\\Program Files\\IBM\\ACE\\12.0.5.0\\server\\bin\\
-call .\\mqsiprofile.cmd
-cd %workspace%
-mqsideploy test -e INTEGRATION_SERVER -a APP.bar
-'''
-archiveArtifacts 'APP.bar'
-}
- }
-   }
 }
