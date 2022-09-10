@@ -24,7 +24,7 @@ set workspace=%cd%
 cd C:\\Program Files\\IBM\\ACE\\12.0.5.0\\server\\bin\\
 call .\\mqsiprofile.cmd
 cd %workspace%
-mqsideploy test -e NAKUL -a APP.bar
+mqsideploy test -e INTEGRATION_SERVER -a APP.bar
 '''
 archiveArtifacts 'APP.bar'
 }
