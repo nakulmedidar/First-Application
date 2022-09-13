@@ -1,12 +1,7 @@
 pipeline {
    agent any
    stages {
-      stage('checkout code') {
-         steps {
-            deleteDir()
-            git 'https://github.com/nakulmedidar/First-Application.git'
-         }
-      }
+      
       stage('build bar') {
         steps {
         bat label: '', script: '''
