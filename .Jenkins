@@ -1,13 +1,20 @@
 pipeline {
    agent any
    stages {
+      stage('checkout code') {
+         steps {
+            deleteDir()
+            git 'https://github.com/nakulmedidar/First-Application.git'
+         }
+      }
+   stages {
       
       stage('build bar') {
         steps {
         bat label: '', script: '''
 echo off
 set projectName=APP
-"C:\\Program Files\\IBM\\ACE\\12.0.5.0\\tools\\mqsicreatebar.exe" -data . -b %projectName%.bar -a %projectName%-cleanBuild
+"C:\\Program Files\\IBM\\ACE\\12.0.5.0\\tools\\mqsicreatebar.exe" -data . -b %projectName%.bar -a %projectName% -cleanBuild
 '''
 }
       }
@@ -19,7 +26,7 @@ set workspace=%cd%
 cd C:\\Program Files\\IBM\\ACE\\12.0.5.0\\server\\bin\\
 call .\\mqsiprofile.cmd
 cd %workspace%
-mqsideploy test -e INTEGRATION_SERVER -a APP.bar
+mqsideploy test -e INTEGRATION_SERVER -a  APP.bar
 '''
 archiveArtifacts 'APP.bar'
 }
