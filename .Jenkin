@@ -2,12 +2,7 @@ pipeline {
    agent any
 
    stages {
-      stage('checkout code') {
-         steps {
-            
-            git 'https://github.com/nakulmedidar/First-Application.git'
-         }
-      }
+      
       stage('build bar') {
         steps {
         bat label: '', script: '''
