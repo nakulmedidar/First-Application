@@ -26,5 +26,12 @@ mqsideploy test -e INTEGRATION_SERVER -a APP.bar
 archiveArtifacts 'APP.bar'
 }
  }
+ stage('Scan'){
+ steps{
+ withSonarQubeEnv(installationName: 'SQ1') {
+   sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+   }
+   }
+   }
    }
 }
